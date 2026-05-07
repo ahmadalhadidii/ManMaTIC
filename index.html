@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MANMATIC PROCESS ATLAS</title>
-<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./styles.css?v=26">
 </head>
 <body>
 <div id="bg"></div>
@@ -48,7 +48,6 @@
 <div id="rail">
   <div class="rail-card data-card">
     <div class="rail-title">PROJECT DEVELOPMENT DATA</div>
-    <div class="decision-note"><b>Decision Ownership:</b> final architectural decisions remained with Ahmad Al-Hadidii.</div>
     <div id="stats">
       <div class="st"><div class="st-n">377</div><div class="st-l">Scanned Conversations</div></div>
       <div class="st"><div class="st-n">86</div><div class="st-l">Curated Project Discussions</div></div>
@@ -64,10 +63,7 @@
 
   <div id="method" class="rail-card">
     <div class="m-title">DESIGN PROCESS</div>
-    <p><b>1) Direction and decisions:</b> Ahmad set design intent, selected directions, and made the final architectural judgments.</p>
-    <p><b>2) Critical development:</b> Orion supported critique cycles, option testing, wording precision, precedent comparison, and technical inquiry to stress-test and sharpen decisions.</p>
-    <p><b>3) Evidence before adoption:</b> each accepted move was discussed, referenced, and iterated before being fixed into plan, section, and representation.</p>
-    <p><b>Evidence base:</b> <b>112</b> reviewed boards, <b>74</b> case-study references, and <b>120</b> research/technical sources.</p>
+    <p><b>Ahmad Al-Hadidii</b> is the architectural author and final decision-maker of this project, setting direction, evaluating alternatives, and approving what enters the design. <b>Orion</b> worked as a design-thinking partner in idea development, option testing, and decision refinement. The collaboration between Ahmad and Orion reflected the <b>prospective perspective of the project</b>. As a result, every accepted line in the plan and every design decision came through discussion, critical thinking, and research before adoption, while <b>the final architectural decision always remained Ahmad's</b>.</p>
   </div>
 </div>
 
@@ -76,7 +72,7 @@
   <div id="filters"></div>
   <button class="f-arrow" onclick="scrollFilters(1)">&gt;</button>
 </div>
-<div id="filter-note">Each category reflects discussed design decisions and their impact on the project. In plan development, every line was debated, tested, and then fixed.</div>
+<div id="filter-note">Each family in the graph reflects the impact of discussed design decisions; in plan development, <b>every decision and every line</b> was produced through discussion, critical thinking, and research, and that evidence trail is visible in the graph.</div>
 
 <div id="mobilePanelBar">
   <div class="mp-title" id="mp-title"></div>
@@ -88,7 +84,7 @@
   <div class="p-head" id="p-drag-handle">
     <div class="p-head-main">
       <div class="p-title" id="p-title"></div>
-      <button class="p-close" id="p-close" type="button" aria-label="Close popup">x</button>
+      <button class="p-close" id="p-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">x</button>
     </div>
     <div class="p-tag" id="p-tag"></div>
   </div>
@@ -104,7 +100,7 @@
       <div id="nm-title"></div>
       <div id="nm-tag"></div>
     </div>
-    <button id="nm-close" type="button" aria-label="Close popup">x</button>
+    <button id="nm-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">x</button>
   </div>
   <div id="nodeModalScroll">
     <div id="nm-body"></div>

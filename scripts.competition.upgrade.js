@@ -133,20 +133,20 @@
   };
 
   const GROUP_WEIGHTS = {
-    "PROBLEM": 8.4,
-    "ORIGINALITY": 8.8,
-    "SITE RELEVANCE": 8.7,
-    "RESEARCH EVIDENCE": 8.6,
-    "EVALUATION CRITERIA": 8.9,
-    "PROGRAM PROTOCOL": 8.8,
-    "PLAN DEVELOPMENT": 9.1,
-    "MASSING / SITE FIT": 8.7,
-    "SUSTAINABILITY": 8.7,
-    "MACHINE LAYER": 8.6,
-    "TECHNICAL DRAWINGS": 8.9,
-    "CASE STUDIES": 8.3,
-    "RENDERS / VISUAL PROOF": 8.5,
-    "AUTHORSHIP": 8.2
+    "PROBLEM": 6.1,
+    "ORIGINALITY": 7.2,
+    "SITE RELEVANCE": 6.8,
+    "RESEARCH EVIDENCE": 6.4,
+    "EVALUATION CRITERIA": 6.2,
+    "PROGRAM PROTOCOL": 7.0,
+    "PLAN DEVELOPMENT": 7.9,
+    "MASSING / SITE FIT": 6.6,
+    "SUSTAINABILITY": 6.3,
+    "MACHINE LAYER": 7.4,
+    "TECHNICAL DRAWINGS": 7.6,
+    "CASE STUDIES": 5.4,
+    "RENDERS / VISUAL PROOF": 5.8,
+    "AUTHORSHIP": 5.1
   };
 
   const KEYWORD_IMPACT = [
@@ -220,16 +220,20 @@
       return 10.0;
     }
 
-    const base = GROUP_WEIGHTS[node.group] || (node.tier === "hub" ? 8.2 : 6.4);
+    const base = GROUP_WEIGHTS[node.group] || (node.tier === "hub" ? 6.4 : 4.4);
     const neighborCount = node.nei ? node.nei.size : 0;
-    const neighborBoost = Math.min(1.0, neighborCount / 18);
-    const tierBoost = node.tier === "hub" ? 0.55 : 0.0;
-    const evidenceBoost = node.group === "PLAN DEVELOPMENT" || node.group === "TECHNICAL DRAWINGS" ? 0.25 : 0.1;
+    const neighborBoost = node.tier === "hub"
+      ? Math.min(1.6, neighborCount / 10)
+      : Math.min(1.1, neighborCount / 16);
+    const tierBias = node.tier === "hub" ? 0.95 : -0.95;
+    const evidenceBoost = node.group === "PLAN DEVELOPMENT" || node.group === "TECHNICAL DRAWINGS"
+      ? 0.55
+      : (node.group === "CASE STUDIES" ? -0.25 : 0.15);
 
-    const min = node.tier === "hub" ? 7.2 : 4.3;
-    const max = node.tier === "hub" ? 9.9 : 9.1;
+    const min = node.tier === "hub" ? 4.8 : 2.2;
+    const max = node.tier === "hub" ? 9.4 : 7.8;
 
-    return round1(clamp(base + neighborBoost + tierBoost + evidenceBoost - 0.7, min, max));
+    return round1(clamp(base + neighborBoost + tierBias + evidenceBoost, min, max));
   }
 
   function roleTextUpgraded(node) {
@@ -349,8 +353,41 @@
     });
   }
 
+  function bindReliableCloseButtons() {
+    if (document.documentElement.dataset.closePatchV1 === "1") {
+      return;
+    }
+    document.documentElement.dataset.closePatchV1 = "1";
+
+    const closeSelector = "#p-close,#nm-close,.mp-close";
+    const onCloseIntent = function (e) {
+      const target = e.target;
+      if (!target || typeof target.closest !== "function") {
+        return;
+      }
+      const trigger = target.closest(closeSelector);
+      if (!trigger) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === "function") {
+        e.stopImmediatePropagation();
+      }
+      if (typeof window.closePanel === "function") {
+        window.closePanel();
+      }
+    };
+
+    document.addEventListener("click", onCloseIntent, true);
+    document.addEventListener("touchend", onCloseIntent, true);
+    document.addEventListener("pointerup", onCloseIntent, true);
+  }
+
+  bindReliableCloseButtons();
+
   const filterNote = document.getElementById("filter-note");
   if (filterNote) {
-    filterNote.innerHTML = "Each category reflects <b>discussed</b> and <b>validated</b> design decisions and their impact on the project. In plan development, every line was debated, tested, and then fixed.";
+    filterNote.innerHTML = "Each family in the graph reflects the impact of discussed design decisions; in plan development, <b>every decision and every line</b> was produced through discussion, critical thinking, and research, and that evidence trail is visible in the graph.";
   }
 })();
