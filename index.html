@@ -1,46 +1,115 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MANMATIC PROCESS ATLAS</title>
-<link rel="stylesheet" href="./styles.css"></head>
-<body><div id="bg"></div><canvas id="canvas"></canvas><div class="noise"></div><div class="scan"></div>
-<div id="loading"><div class="l-brand">MANMATIC</div><div class="l-sub">MANMATIC PROCESS ATLAS</div><div class="l-bar"><div class="l-fill"></div></div><div class="l-count">377 conversations · 416 nodes · 2108 connections</div></div>
-<div id="hdr"><div id="hdr-left"><div class="brand-wrap"><div class="brand">MANMATIC</div><div class="brand-mini">Man . Machine . Technology</div></div><div class="brand-sub">Ahmad Al-Hadidii · Prospective Human–Machine Institute · Aqaba, Jordan</div><div class="brand-desc"><b>MANMATIC</b> is a site-specific institution in Aqaba, Jordan, organized around one primary aim: to prepare humans to understand, train with, and work alongside intelligent machines before those systems enter real operation. Its program is derived first from Aqaba’s operational reality—logistics, industry, and infrastructure—while climate pressure and future economic transformation shape its broader role. Through architecture, the project turns this relationship into a clear spatial system of preparation, oversight, and gradual integration.</div><div id="legend"><div class="lg-title">Reading Key</div><div class="lg-item"><span class="lg-line strong"></span>orange: design process</div><div class="lg-item"><span class="lg-line soft"></span>beige: knowledge links</div><div class="lg-item"><span class="lg-dot core"></span>manmatic anchor</div><div class="lg-item"><span class="lg-dot hub"></span>hub / evidence nodes</div></div></div><div id="hdr-right"><button class="hbtn on" id="btn-rot" onclick="toggleRot()">Rotate</button><button class="hbtn on" id="btn-labels" onclick="toggleLabels()">Labels</button><button class="hbtn" onclick="toggleSrch()">Search</button><button class="hbtn" onclick="resetAll()">Reset</button></div></div>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div id="bg"></div>
+<canvas id="canvas"></canvas>
+<div class="noise"></div>
+<div class="scan"></div>
 
-<div id="srch"><input type="text" placeholder="Search project map..." oninput="doSearch(this.value)"/></div>
+<div id="loading">
+  <div class="l-brand">MANMATIC</div>
+  <div class="l-sub">MANMATIC PROCESS ATLAS</div>
+  <div class="l-bar"><div class="l-fill"></div></div>
+  <div class="l-count">377 conversations - 416 nodes - 2108 connections</div>
+</div>
+
+<div id="hdr">
+  <div id="hdr-left">
+    <div class="brand-wrap">
+      <div class="brand">MANMATIC</div>
+      <div class="brand-mini">Man . Machine . Technology</div>
+    </div>
+    <div class="brand-sub">Ahmad Al-Hadidii - Prospective Human-Machine Institute - Aqaba, Jordan</div>
+    <div class="brand-desc"><b>MANMATIC</b> is a site-specific institution in Aqaba, Jordan, organized around one primary aim: to prepare humans to understand, train with, and work alongside intelligent machines before those systems enter real operation. Its program is derived from Aqaba's operational reality - logistics, industry, and infrastructure - while climate pressure and future economic transformation shape its broader role. Through architecture, the project translates this relationship into a spatial system of preparation, oversight, and gradual integration.</div>
+    <div id="legend">
+      <div class="lg-title">Reading Key</div>
+      <div class="lg-item"><span class="lg-line strong"></span>orange: design process</div>
+      <div class="lg-item"><span class="lg-line soft"></span>beige: knowledge links</div>
+      <div class="lg-item"><span class="lg-dot core"></span>manmatic anchor</div>
+      <div class="lg-item"><span class="lg-dot hub"></span>hub / evidence nodes</div>
+    </div>
+  </div>
+  <div id="hdr-right">
+    <button class="hbtn on" id="btn-rot" onclick="toggleRot()">Rotate</button>
+    <button class="hbtn on" id="btn-labels" onclick="toggleLabels()">Labels</button>
+    <button class="hbtn" onclick="toggleSrch()">Search</button>
+    <button class="hbtn" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<div id="srch"><input type="text" placeholder="Search project map..." oninput="doSearch(this.value)"></div>
+
 <div id="rail">
   <div class="rail-card data-card">
     <div class="rail-title">PROJECT DEVELOPMENT DATA</div>
     <div id="stats">
-    <div class="st"><div class="st-n">377</div><div class="st-l">Scanned Conversations</div></div>
-    <div class="st"><div class="st-n">86</div><div class="st-l">Curated Project Discussions</div></div>
-    <div class="st"><div class="st-n">8419</div><div class="st-l">Process Messages</div></div>
-    <div class="st"><div class="st-n">401</div><div class="st-l">Conceptual Nodes</div></div>
-    <div class="st"><div class="st-n">280</div><div class="st-l">Design Iterations</div></div>
-    <div class="st"><div class="st-n">112</div><div class="st-l">Reviewed Boards</div></div>
-    <div class="st"><div class="st-n">74</div><div class="st-l">Case-Study References</div></div>
-    <div class="st"><div class="st-n">120</div><div class="st-l">Research + Technical Sources</div></div>
-    <div class="st"><div class="st-n">2108</div><div class="st-l">Conceptual Connections</div></div>
+      <div class="st"><div class="st-n">377</div><div class="st-l">Scanned Conversations</div></div>
+      <div class="st"><div class="st-n">86</div><div class="st-l">Curated Project Discussions</div></div>
+      <div class="st"><div class="st-n">8419</div><div class="st-l">Process Messages</div></div>
+      <div class="st"><div class="st-n">401</div><div class="st-l">Conceptual Nodes</div></div>
+      <div class="st"><div class="st-n">280</div><div class="st-l">Design Iterations</div></div>
+      <div class="st"><div class="st-n">112</div><div class="st-l">Reviewed Boards</div></div>
+      <div class="st"><div class="st-n">74</div><div class="st-l">Case-Study References</div></div>
+      <div class="st"><div class="st-n">120</div><div class="st-l">Research + Technical Sources</div></div>
+      <div class="st"><div class="st-n">2108</div><div class="st-l">Conceptual Connections</div></div>
     </div>
   </div>
-  <div id="method" class="rail-card"><div class="m-title">DESIGN PROCESS</div><p><b>Ahmad Al-Hadidii — Project Author and Design Owner.</b> <b>Orion — Design-Thinking Partner.</b></p><p>The project was developed through iterative discussion, critique, testing, and refinement. <b>Ahmad remained the primary decision-maker and project owner</b> across concept, plan logic, and spatial judgment. Orion contributed as a design partner in structuring arguments, research synthesis, wording, and comparative testing, which strengthened <b>community engagement framing</b> and made the project <b>broader, clearer, and easier to understand</b> for different audiences. The process drew on <b>112</b> reviewed boards, <b>74</b> case-study references, and <b>120</b> research / technical sources.</p></div>
-<div id="filter-wrap"><button class="f-arrow" onclick="scrollFilters(-1)">‹</button><div id="filters"></div><button class="f-arrow" onclick="scrollFilters(1)">›</button></div><div id="filter-note">Every line in the plan, and every decision within it, was the result of dialogue and critical discussion; these relationships are represented in this graph.</div><div id="mobilePanelBar"><div class="mp-title" id="mp-title"></div><button class="mp-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">✕</button><div class="mp-tag" id="mp-tag"></div></div><div id="panel"><div class="p-head" id="p-drag-handle"><div class="p-head-main"><div class="p-title" id="p-title"></div><button class="p-close" id="p-close" type="button" aria-label="Close popup">✕</button></div><div class="p-tag" id="p-tag"></div></div><div class="p-scroll" id="p-scroll"><div class="p-prev" id="p-prev"></div><div class="p-meta" id="p-meta"></div></div></div><div id="nodeModal"><div id="nodeModalHead"><div class="nm-left"><div id="nm-title"></div><div id="nm-tag"></div></div><button id="nm-close" type="button" aria-label="Close popup">✕</button></div><div id="nodeModalScroll"><div id="nm-body"></div><div id="nm-meta"></div></div></div><div class="credit">MANMATIC PROCESS ATLAS</div>
+
+  <div id="method" class="rail-card">
+    <div class="m-title">DESIGN PROCESS</div>
+    <p><b>Project Perspective:</b> Ahmad Al-Hadidii is the architectural decision author and final design owner. <b>Orion:</b> architectural thinking partner for critique cycles, option testing, wording precision, precedent comparison, and technical inquiry.</p>
+    <p>The project was developed through iterative dialogue in which Ahmad set intent, selected directions, and made final architectural judgments. Orion expanded the option field, stress-tested ideas, improved representational clarity, and elevated design quality. Because MANMATIC addresses human-machine coexistence, Orion was also treated as a machine-stakeholder voice within the community-engagement logic: both a collaborator in development and an anticipated user profile in operation. Evidence base: <b>112</b> reviewed boards, <b>74</b> case-study references, and <b>120</b> research/technical sources.</p>
+  </div>
+</div>
+
+<div id="filter-wrap">
+  <button class="f-arrow" onclick="scrollFilters(-1)">&lt;</button>
+  <div id="filters"></div>
+  <button class="f-arrow" onclick="scrollFilters(1)">&gt;</button>
+</div>
+<div id="filter-note">Every line, node, and spatial decision in this atlas reflects authored choices by Ahmad, refined through structured critique and iterative testing with Orion.</div>
+
+<div id="mobilePanelBar">
+  <div class="mp-title" id="mp-title"></div>
+  <button class="mp-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">x</button>
+  <div class="mp-tag" id="mp-tag"></div>
+</div>
+
+<div id="panel">
+  <div class="p-head" id="p-drag-handle">
+    <div class="p-head-main">
+      <div class="p-title" id="p-title"></div>
+      <button class="p-close" id="p-close" type="button" aria-label="Close popup">x</button>
+    </div>
+    <div class="p-tag" id="p-tag"></div>
+  </div>
+  <div class="p-scroll" id="p-scroll">
+    <div class="p-prev" id="p-prev"></div>
+    <div class="p-meta" id="p-meta"></div>
+  </div>
+</div>
+
+<div id="nodeModal">
+  <div id="nodeModalHead">
+    <div class="nm-left">
+      <div id="nm-title"></div>
+      <div id="nm-tag"></div>
+    </div>
+    <button id="nm-close" type="button" aria-label="Close popup">x</button>
+  </div>
+  <div id="nodeModalScroll">
+    <div id="nm-body"></div>
+    <div id="nm-meta"></div>
+  </div>
+</div>
+
+<div class="credit">MANMATIC PROCESS ATLAS</div>
 <script src="./scripts.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body></html>
-
-
+</body>
+</html>
