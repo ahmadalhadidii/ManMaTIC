@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MANMATIC PROCESS ATLAS</title>
 <link rel="stylesheet" href="./styles.css?v=26">
 </head>
@@ -76,7 +76,7 @@
 
 <div id="mobilePanelBar">
   <div class="mp-title" id="mp-title"></div>
-  <button class="mp-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">x</button>
+  <button class="mp-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="closePanel();">x</button>
   <div class="mp-tag" id="mp-tag"></div>
 </div>
 
@@ -84,7 +84,7 @@
   <div class="p-head" id="p-drag-handle">
     <div class="p-head-main">
       <div class="p-title" id="p-title"></div>
-      <button class="p-close" id="p-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">x</button>
+      <button class="p-close" id="p-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="closePanel();">x</button>
     </div>
     <div class="p-tag" id="p-tag"></div>
   </div>
@@ -100,7 +100,7 @@
       <div id="nm-title"></div>
       <div id="nm-tag"></div>
     </div>
-    <button id="nm-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="event.stopPropagation(); closePanel();">x</button>
+    <button id="nm-close" type="button" aria-label="Close popup" onclick="closePanel()" ontouchend="closePanel();">x</button>
   </div>
   <div id="nodeModalScroll">
     <div id="nm-body"></div>
@@ -109,7 +109,7 @@
 </div>
 
 <div class="credit">MANMATIC PROCESS ATLAS</div>
-<script src="./scripts.js?v=27"></script>
-<script src="./scripts.competition.upgrade.js?v=27"></script>
+<script src="./scripts.js?v=28"></script>
+<script src="./scripts.competition.upgrade.js?v=28"></script>
 </body>
 </html>

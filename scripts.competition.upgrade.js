@@ -384,10 +384,6 @@
     document.addEventListener("pointerup", onCloseIntent, true);
   }
 
-  function isPhoneLikeMode() {
-    return window.matchMedia("(max-width:900px) and (pointer:coarse), (max-height:700px) and (pointer:coarse)").matches;
-  }
-
   function panelIsOpen() {
     return document.body.classList.contains("panel-open") || document.body.classList.contains("node-modal-open");
   }
@@ -425,17 +421,15 @@
     return pickNodeAtPoint(point.x, point.y);
   }
 
-  let lastTouchDragAt = 0;
-
   function bindOutsideTapBehavior() {
-    if (document.documentElement.dataset.outsideTapPatchV2 === "1") {
+    if (document.documentElement.dataset.outsideTapPatchV3 === "1") {
       return;
     }
-    document.documentElement.dataset.outsideTapPatchV2 = "1";
+    document.documentElement.dataset.outsideTapPatchV3 = "1";
 
     const insideSelectors = "#panel,#nodeModal,#mobilePanelBar,#srch";
-    const controlSelectors = "button,input,textarea,select,a,label,#filters,#filter-wrap,#hdr-right,#rail";
     let touchStartPoint = null;
+    let ignoreClickUntil = 0;
 
     const onTouchStart = function (e) {
       if (!panelIsOpen() || !e.touches || !e.touches.length) {
@@ -446,18 +440,14 @@
       touchStartPoint = { x: t.clientX, y: t.clientY };
     };
 
-    const onOutsideIntent = function (e) {
+    const onOutsideIntent = function (e, isTouch) {
       if (!panelIsOpen()) {
         return;
       }
-
-      if (e && e.__manmaticTouchDragHandled) {
+      if (!isTouch && Date.now() < ignoreClickUntil) {
         return;
       }
-      if (Date.now() - lastTouchDragAt < 240) {
-        return;
-      }
-      if (e.type === "touchend") {
+      if (isTouch) {
         const t = e.changedTouches && e.changedTouches.length ? e.changedTouches[0] : null;
         if (t && touchStartPoint) {
           const moved = Math.hypot(t.clientX - touchStartPoint.x, t.clientY - touchStartPoint.y);
@@ -467,16 +457,11 @@
           }
         }
         touchStartPoint = null;
+        ignoreClickUntil = Date.now() + 450;
       }
 
       const target = e.target;
       if (target && typeof target.closest === "function" && target.closest(insideSelectors)) {
-        return;
-      }
-      if (target && typeof target.closest === "function" && target.closest(controlSelectors)) {
-        if (typeof window.closePanel === "function") {
-          window.closePanel();
-        }
         return;
       }
 
@@ -492,116 +477,26 @@
       }
 
       if (typeof window.closePanel === "function") {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") {
+          e.stopImmediatePropagation();
+        }
         window.closePanel();
       }
     };
 
     document.addEventListener("touchstart", onTouchStart, true);
-    document.addEventListener("click", onOutsideIntent, true);
-    document.addEventListener("touchend", onOutsideIntent, true);
-    document.addEventListener("pointerup", onOutsideIntent, true);
-  }
-
-  function bindMobileTouchRotateFallback() {
-    if (document.documentElement.dataset.mobileTouchFallbackV2 === "1") {
-      return;
-    }
-    document.documentElement.dataset.mobileTouchFallbackV2 = "1";
-
-    const drag = {
-      active: false,
-      moved: false,
-      startX: 0,
-      startY: 0,
-      lastX: 0,
-      lastY: 0
-    };
-
-    function isInteractiveTarget(target) {
-      if (!target || typeof target.closest !== "function") {
-        return false;
-      }
-      return !!target.closest("button,input,textarea,select,a,label,#panel,#nodeModal,#mobilePanelBar,#p-scroll,#nodeModalScroll,#filters,#srch,#canvas");
-    }
-
-    function onTouchStart(e) {
-      if (!isPhoneLikeMode() || !e.touches || e.touches.length !== 1 || isInteractiveTarget(e.target)) {
-        drag.active = false;
-        return;
-      }
-      const t = e.touches[0];
-      drag.active = true;
-      drag.moved = false;
-      drag.startX = drag.lastX = t.clientX;
-      drag.startY = drag.lastY = t.clientY;
-    }
-
-    function onTouchMove(e) {
-      if (!drag.active || !e.touches || e.touches.length !== 1) {
-        return;
-      }
-      const t = e.touches[0];
-      const dx = t.clientX - drag.lastX;
-      const dy = t.clientY - drag.lastY;
-
-      if (Math.hypot(t.clientX - drag.startX, t.clientY - drag.startY) > 7) {
-        drag.moved = true;
-      }
-
-      if (typeof rotY === "number" && typeof rotX === "number") {
-        rotY += dx * 0.005;
-        rotX += dy * 0.005;
-        drag.lastX = t.clientX;
-        drag.lastY = t.clientY;
-        e.preventDefault();
-        e.__manmaticTouchDragHandled = true;
-      }
-    }
-
-    function onTouchEnd(e) {
-      if (drag.moved) {
-        lastTouchDragAt = Date.now();
-        if (e) {
-          e.__manmaticTouchDragHandled = true;
-        }
-      }
-      drag.active = false;
-      drag.moved = false;
-    }
-
-    document.addEventListener("touchstart", onTouchStart, { capture: true, passive: true });
-    document.addEventListener("touchmove", onTouchMove, { capture: true, passive: false });
-    document.addEventListener("touchend", onTouchEnd, { capture: true, passive: true });
-    document.addEventListener("touchcancel", onTouchEnd, { capture: true, passive: true });
-  }
-
-  function bindViewportRefresh() {
-    if (document.documentElement.dataset.viewportRefreshV1 === "1") {
-      return;
-    }
-    document.documentElement.dataset.viewportRefreshV1 = "1";
-
-    let frame = 0;
-    const refresh = function () {
-      if (frame) {
-        cancelAnimationFrame(frame);
-      }
-      frame = requestAnimationFrame(function () {
-        window.dispatchEvent(new Event("resize"));
-      });
-    };
-
-    window.addEventListener("orientationchange", refresh, { passive: true });
-    window.addEventListener("pageshow", refresh, { passive: true });
-    if (window.visualViewport && typeof window.visualViewport.addEventListener === "function") {
-      window.visualViewport.addEventListener("resize", refresh, { passive: true });
-    }
+    document.addEventListener("touchend", function (e) {
+      onOutsideIntent(e, true);
+    }, true);
+    document.addEventListener("click", function (e) {
+      onOutsideIntent(e, false);
+    }, true);
   }
 
   bindReliableCloseButtons();
-  bindMobileTouchRotateFallback();
   bindOutsideTapBehavior();
-  bindViewportRefresh();
 
   const filterNote = document.getElementById("filter-note");
   if (filterNote) {
