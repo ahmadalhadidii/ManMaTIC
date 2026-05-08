@@ -1238,10 +1238,7 @@ html,body{height:100dvh;min-height:100dvh}
   #method,
   #filter-note,
   #legend,
-  #srch,
-  #hdr-right,
   .brand-mini,
-  .brand-sub,
   .brand-desc,
   .credit{
     display:none !important;
@@ -1267,6 +1264,47 @@ html,body{height:100dvh;min-height:100dvh}
   .brand{
     font-size:15px !important;
     letter-spacing:2.2px !important;
+  }
+  .brand-sub{
+    display:block !important;
+    white-space:normal !important;
+    font-size:6.5px !important;
+    letter-spacing:1.2px !important;
+    line-height:1.22 !important;
+    color:rgba(216,92,39,.58) !important;
+    margin-top:3px !important;
+  }
+  #hdr-right{
+    display:grid !important;
+    grid-template-columns:repeat(2,auto) !important;
+    gap:4px !important;
+    position:fixed !important;
+    top:7px !important;
+    right:7px !important;
+    pointer-events:auto !important;
+    z-index:230 !important;
+  }
+  .hbtn{
+    font-size:6.6px !important;
+    letter-spacing:.5px !important;
+    padding:4px 7px !important;
+  }
+  #srch{
+    display:none !important;
+    top:58px !important;
+    width:calc(100vw - 20px) !important;
+    left:10px !important;
+    right:10px !important;
+    transform:none !important;
+    z-index:240 !important;
+  }
+  #srch.show{
+    display:block !important;
+  }
+  #srch input{
+    width:100% !important;
+    font-size:10px !important;
+    padding:8px 12px !important;
   }
   #filter-wrap{
     position:fixed !important;

@@ -502,13 +502,13 @@
         return;
       }
       try {
-        labels = false;
+        labels = true;
       } catch (err) {
         // Keep UI-only fallback below if lexical label variable is not writable.
       }
       const labelBtn = document.getElementById("btn-labels");
       if (labelBtn) {
-        labelBtn.classList.remove("on");
+        labelBtn.classList.add("on");
       }
     };
 
