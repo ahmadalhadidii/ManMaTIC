@@ -495,8 +495,34 @@
     }, true);
   }
 
+  function applyMobileLabelMode() {
+    const media = window.matchMedia("(max-width:900px) and (pointer:coarse), (max-height:700px) and (pointer:coarse)");
+    const sync = function () {
+      if (!media.matches) {
+        return;
+      }
+      try {
+        labels = false;
+      } catch (err) {
+        // Keep UI-only fallback below if lexical label variable is not writable.
+      }
+      const labelBtn = document.getElementById("btn-labels");
+      if (labelBtn) {
+        labelBtn.classList.remove("on");
+      }
+    };
+
+    sync();
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", sync);
+    } else if (typeof media.addListener === "function") {
+      media.addListener(sync);
+    }
+  }
+
   bindReliableCloseButtons();
   bindOutsideTapBehavior();
+  applyMobileLabelMode();
 
   const filterNote = document.getElementById("filter-note");
   if (filterNote) {

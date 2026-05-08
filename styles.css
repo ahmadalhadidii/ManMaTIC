@@ -1223,3 +1223,68 @@ html,body{height:100dvh;min-height:100dvh}
   }
 }
 
+/* v29 iPhone rescue: keep only title + families + graph + popup */
+@media (max-width:900px) and (pointer:coarse), (max-height:700px) and (pointer:coarse){
+  html,body{
+    overflow:hidden !important;
+    touch-action:none !important;
+  }
+  #canvas{
+    width:100vw !important;
+    height:100dvh !important;
+    touch-action:none !important;
+  }
+  #rail,
+  #method,
+  #filter-note,
+  #legend,
+  #srch,
+  #hdr-right,
+  .brand-mini,
+  .brand-sub,
+  .brand-desc,
+  .credit{
+    display:none !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+  body.panel-open #rail,
+  body.node-modal-open #rail{
+    display:none !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+  #hdr{
+    padding:8px 10px 6px !important;
+    background:linear-gradient(180deg,rgba(10,10,10,.88) 0%,rgba(10,10,10,.30) 70%,rgba(10,10,10,0) 100%) !important;
+    pointer-events:none !important;
+    z-index:150 !important;
+  }
+  #hdr-left{
+    width:auto !important;
+    max-width:100% !important;
+  }
+  .brand{
+    font-size:15px !important;
+    letter-spacing:2.2px !important;
+  }
+  #filter-wrap{
+    position:fixed !important;
+    left:max(8px,env(safe-area-inset-left,0px)) !important;
+    right:max(8px,env(safe-area-inset-right,0px)) !important;
+    bottom:calc(10px + env(safe-area-inset-bottom,0px)) !important;
+    transform:none !important;
+    width:auto !important;
+    max-width:none !important;
+    z-index:220 !important;
+    display:flex !important;
+    pointer-events:auto !important;
+  }
+  #filters{
+    max-width:none !important;
+    flex:1 1 auto !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+}
+
