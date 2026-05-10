@@ -1,1 +1,4 @@
-/*            /index.html   200
+http://manmatic.institute/* https://www.manmatic.institute/:splat 301!
+http://www.manmatic.institute/* https://www.manmatic.institute/:splat 301!
+https://manmatic.institute/* https://www.manmatic.institute/:splat 301!
+/* /index.html 200
