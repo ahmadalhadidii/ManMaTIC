@@ -526,6 +526,6 @@
 
   const filterNote = document.getElementById("filter-note");
   if (filterNote) {
-    filterNote.innerHTML = "Each family in the graph reflects the impact of discussed design decisions; in plan development, <b>every decision and every line</b> was produced through discussion, critical thinking, and research, and that evidence trail is visible in the graph.";
+    filterNote.innerHTML = "<b>Every node in the graph</b> reflects the impact of <b>design decisions</b> discussed throughout the process. <b>Every line in the plan</b>, and <b>every idea within the project</b>, emerged through <b>critical thinking, research, questioning, and refinement</b>, turning the graph into a <b>visible evidence trail</b> of the <b>design process</b>.";
   }
 })();
