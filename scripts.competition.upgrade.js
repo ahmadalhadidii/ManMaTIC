@@ -6,16 +6,16 @@
   const GROUP_TRACE = {
     "PROBLEM": {
       focus: "foundational risk definition",
-      conversations: "brief-definition dialogues and pressure-mapping reviews",
+      inputs: "brief-definition input traces and pressure-mapping reviews",
       research: "future-of-work, AI governance, and accountability references",
       outputs: "problem statement diagrams, protocol framing, and early plan priorities",
       role: "why the institution must exist before form-making",
       review: "the project converts abstract AI pressure into spatially testable obligations",
-      short: "Conversations + governance research"
+      short: "Input traces + governance research"
     },
     "ORIGINALITY": {
       focus: "typological invention",
-      conversations: "program-option comparisons and identity critique rounds",
+      inputs: "program-option traces and identity critique rounds",
       research: "institutional precedents, governance models, and learning typologies",
       outputs: "new institutional protocol, sequence logic, and identity structure",
       role: "how the project avoids becoming a generic AI center",
@@ -24,7 +24,7 @@
     },
     "SITE RELEVANCE": {
       focus: "Aqaba-specific operational grounding",
-      conversations: "site-fit workshops and force-alignment discussions",
+      inputs: "site-fit workshops and force-alignment traces",
       research: "port logistics, climate, terrain, and regional transition studies",
       outputs: "site narrative diagrams, locational justification, and form drivers",
       role: "why this project belongs to this place and no other",
@@ -33,7 +33,7 @@
     },
     "RESEARCH EVIDENCE": {
       focus: "evidence-backed decision making",
-      conversations: "claim-check sessions and assumption stress tests",
+      inputs: "claim-check signals and assumption stress tests",
       research: "literature review, standards, case comparisons, and technical notes",
       outputs: "decision validation, technical direction, and argument credibility",
       role: "preventing intuition-only decisions",
@@ -42,7 +42,7 @@
     },
     "EVALUATION CRITERIA": {
       focus: "high-standard performance testing",
-      conversations: "review simulations and scoring-framework calibration",
+      inputs: "review simulations and scoring-framework traces",
       research: "international benchmarks and architectural quality criteria",
       outputs: "evaluation matrix, proof requirements, and representation priorities",
       role: "how design quality is measured and defended",
@@ -51,7 +51,7 @@
     },
     "PROGRAM PROTOCOL": {
       focus: "institutional sequencing",
-      conversations: "workflow mapping and access-gradient critiques",
+      inputs: "workflow mapping and access-gradient signal reviews",
       research: "learning progression models and controlled-operation frameworks",
       outputs: "public-to-machine sequence, control gradients, and adjacency logic",
       role: "how humans progressively engage machine intensity",
@@ -60,7 +60,7 @@
     },
     "PLAN DEVELOPMENT": {
       focus: "line-by-line plan intelligence",
-      conversations: "iterative plan markups, redline sessions, and alternative testing",
+      inputs: "iterative plan markups, redline signals, and alternative testing",
       research: "planning precedents, operational diagrams, and occupancy behavior",
       outputs: "circulation hierarchy, room adjacency, service pockets, and thresholds",
       role: "how every line in plan earns its position",
@@ -69,7 +69,7 @@
     },
     "MASSING / SITE FIT": {
       focus: "sectional and volumetric alignment",
-      conversations: "massing critiques and profile-comparison loops",
+      inputs: "massing traces and profile-comparison loops",
       research: "topography response studies, solar envelopes, and urban fit references",
       outputs: "volume stepping, sectional hierarchy, and site anchoring",
       role: "how the building sits, rises, and relates to the ground",
@@ -78,7 +78,7 @@
     },
     "SUSTAINABILITY": {
       focus: "climate-performance integration",
-      conversations: "performance trade-off reviews and system coordination rounds",
+      inputs: "performance trade-off signals and system coordination rounds",
       research: "thermal behavior, passive strategy, and infrastructure performance data",
       outputs: "environmental systems, shading logic, and technical section decisions",
       role: "turning climate pressure into spatial performance",
@@ -87,7 +87,7 @@
     },
     "MACHINE LAYER": {
       focus: "high-intensity operational governance",
-      conversations: "risk-control planning and oversight protocol sessions",
+      inputs: "risk-control planning and oversight protocol traces",
       research: "compute operations, infrastructure resilience, and control-room references",
       outputs: "machine-zone concentration, supervision logic, and service routing",
       role: "making machine operations controlled, safe, and legible",
@@ -96,7 +96,7 @@
     },
     "TECHNICAL DRAWINGS": {
       focus: "proof through technical representation",
-      conversations: "drawing-audit cycles and clarity refinement reviews",
+      inputs: "drawing-audit cycles and clarity refinement signals",
       research: "drawing standards, detailing references, and documentation protocols",
       outputs: "plans, sections, diagrams, matrices, and verification visuals",
       role: "transforming ideas into measurable proof",
@@ -105,7 +105,7 @@
     },
     "CASE STUDIES": {
       focus: "comparative intelligence",
-      conversations: "precedent extraction sessions and transferability debates",
+      inputs: "precedent extraction traces and transferability debates",
       research: "global references and institutional analog mapping",
       outputs: "translated lessons, adapted strategies, and risk avoidance",
       role: "learning what to adopt, adapt, or reject",
@@ -114,7 +114,7 @@
     },
     "RENDERS / VISUAL PROOF": {
       focus: "visual and atmospheric verification",
-      conversations: "scene-direction critiques and narrative alignment checks",
+      inputs: "scene-direction signals and narrative alignment checks",
       research: "material reference packs, scale cues, and visual communication studies",
       outputs: "review-facing imagery, atmosphere control, and perception testing",
       role: "proving spatial intent in image form",
@@ -123,7 +123,7 @@
     },
     "AUTHORSHIP": {
       focus: "decision governance and accountability",
-      conversations: "authorship clarification dialogues and responsibility mapping",
+      inputs: "authorship clarification traces and responsibility mapping",
       research: "collaborative design methodology and process documentation",
       outputs: "clear ownership narrative, critique role definition, and process transparency",
       role: "showing where judgment is made and by whom",
@@ -187,7 +187,7 @@
   function traceFor(group) {
     return GROUP_TRACE[group] || {
       focus: "integrated design reasoning",
-      conversations: "iterative critique sessions",
+      inputs: "iterative critique traces",
       research: "targeted references",
       outputs: "documented architectural decisions",
       role: "supporting project coherence",
@@ -198,20 +198,20 @@
 
   function keywordImpact(label) {
     const hit = KEYWORD_IMPACT.find((entry) => entry.re.test(label));
-    return hit ? hit.text : "Its influence is tracked through adjacency, sequence, and representational proof across the atlas.";
+    return hit ? hit.text : "Its influence is tracked through adjacency, sequence, and representational proof across the field.";
   }
 
   function composeHubDescription(node) {
     const trace = traceFor(node.group);
     return node.label + " frames the project's " + trace.focus + ". " +
-      "This hub is a decision stack linking " + trace.conversations + ", " + trace.research + ", and " +
+      "This hub is a decision stack linking " + trace.inputs + ", " + trace.research + ", and " +
       trace.outputs + " into accountable architectural moves.";
   }
 
   function composeTopicDescription(node) {
     const trace = traceFor(node.group);
     return node.label + " operates as a traceable decision variable inside " + node.group + ". " +
-      "It was stress-tested through " + trace.conversations + ", grounded by " + trace.research + ", " +
+      "It was stress-tested through " + trace.inputs + ", grounded by " + trace.research + ", " +
       "and translated into " + trace.outputs + ". " + keywordImpact(node.label);
   }
 
@@ -244,7 +244,7 @@
 
   function evidenceTextUpgraded(node) {
     const trace = traceFor(node.group);
-    return "Evidence chain: " + trace.conversations + " -> " + trace.research + " -> " + trace.outputs + ". " +
+    return "Evidence chain: " + trace.inputs + " -> " + trace.research + " -> " + trace.outputs + ". " +
       "This node remains linked in the graph so the design claim can be checked against related decisions.";
   }
 
