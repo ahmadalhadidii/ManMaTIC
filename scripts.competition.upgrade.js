@@ -248,12 +248,29 @@
       "This node remains linked in the graph so the design claim can be checked against related decisions.";
   }
 
+  function escapeHTML(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (char) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      }[char];
+    });
+  }
+
   function buildPanelBody(node) {
-    return "<div class=\"p-sec\"><span class=\"p-sec-h\">Meaning</span><div class=\"p-sec-b\">" + node.description + "</div></div>" +
-      "<div class=\"p-sec\"><span class=\"p-sec-h\">Design Impact</span><div class=\"p-sec-b\">" + roleTextUpgraded(node) + "</div></div>" +
-      "<div class=\"p-sec\"><span class=\"p-sec-h\">Evidence Trail</span><div class=\"p-sec-b\">" + evidenceTextUpgraded(node) + "</div></div>" +
+    const description = escapeHTML(node.description);
+    const role = escapeHTML(roleTextUpgraded(node));
+    const evidence = escapeHTML(evidenceTextUpgraded(node));
+    const value = escapeHTML(Number(node.val || 0).toFixed(1));
+
+    return "<div class=\"p-sec\"><span class=\"p-sec-h\">Meaning</span><div class=\"p-sec-b\">" + description + "</div></div>" +
+      "<div class=\"p-sec\"><span class=\"p-sec-h\">Design Impact</span><div class=\"p-sec-b\">" + role + "</div></div>" +
+      "<div class=\"p-sec\"><span class=\"p-sec-h\">Evidence Trail</span><div class=\"p-sec-b\">" + evidence + "</div></div>" +
       "<div class=\"p-sec\"><span class=\"p-sec-h\">Project Value</span><div class=\"p-sec-b\">" +
-      "Value score: " + Number(node.val || 0).toFixed(1) + "/10. This reflects discussed impact, evidence depth, and decision centrality across the project map." +
+      "Value score: " + value + "/10. This reflects discussed impact, evidence depth, and decision centrality across the project map." +
       "</div></div>";
   }
 
@@ -324,14 +341,57 @@
       return;
     }
 
+    try {
+      selected = node;
+    } catch (err) {
+      // Keep the visible panel usable even if the original selected binding is not writable.
+    }
+
     const mobileMode = window.matchMedia("(max-width:900px) and (pointer:coarse), (max-height:700px) and (pointer:coarse)").matches;
 
-    if (mobileMode && typeof mobileShowPanel === "function") {
-      mobileShowPanel(node);
-    } else if (typeof desktopShowPanel === "function") {
-      desktopShowPanel(node);
-    } else if (typeof mobileShowPanel === "function") {
-      mobileShowPanel(node);
+    if (mobileMode) {
+      const panel = document.getElementById("panel");
+      const bar = document.getElementById("mobilePanelBar");
+      const modal = document.getElementById("nodeModal");
+      const scroll = document.getElementById("nodeModalScroll");
+
+      if (panel) panel.classList.remove("show", "sheet-expanded", "dragging");
+      if (bar) bar.classList.remove("show");
+      document.body.classList.remove("panel-open");
+      document.body.classList.add("node-modal-open");
+      if (modal) {
+        modal.classList.remove("nm-dragging");
+        modal.style.transform = "";
+      }
+      if (scroll) {
+        scroll.scrollTop = 0;
+        requestAnimationFrame(function () {
+          scroll.scrollTop = 0;
+        });
+        setTimeout(function () {
+          scroll.scrollTop = 0;
+        }, 60);
+      }
+    } else {
+      const panel = document.getElementById("panel");
+      const scroll = document.getElementById("p-scroll");
+
+      document.body.classList.remove("node-modal-open");
+      document.body.classList.add("panel-open");
+      if (panel) {
+        panel.classList.add("show");
+        panel.classList.remove("dragging");
+        panel.style.transform = "";
+      }
+      if (typeof applyPanelSheetState === "function") {
+        applyPanelSheetState("compact");
+      }
+      if (scroll) {
+        scroll.scrollTop = 0;
+        requestAnimationFrame(function () {
+          scroll.scrollTop = 0;
+        });
+      }
     }
 
     hydrateOpenPanels(node);
@@ -382,6 +442,50 @@
     document.addEventListener("click", onCloseIntent, true);
     document.addEventListener("touchend", onCloseIntent, true);
     document.addEventListener("pointerup", onCloseIntent, true);
+  }
+
+  function bindStaticControls() {
+    if (document.documentElement.dataset.controlsPatchV1 === "1") {
+      return;
+    }
+    document.documentElement.dataset.controlsPatchV1 = "1";
+
+    const bindClick = function (id, handler) {
+      const el = document.getElementById(id);
+      if (!el) {
+        return;
+      }
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        handler();
+      });
+    };
+
+    bindClick("btn-rot", function () {
+      if (typeof toggleRot === "function") toggleRot();
+    });
+    bindClick("btn-labels", function () {
+      if (typeof toggleLabels === "function") toggleLabels();
+    });
+    bindClick("btn-search", function () {
+      if (typeof toggleSrch === "function") toggleSrch();
+    });
+    bindClick("btn-reset", function () {
+      if (typeof resetAll === "function") resetAll();
+    });
+    bindClick("filter-prev", function () {
+      if (typeof scrollFilters === "function") scrollFilters(-1);
+    });
+    bindClick("filter-next", function () {
+      if (typeof scrollFilters === "function") scrollFilters(1);
+    });
+
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", function () {
+        if (typeof doSearch === "function") doSearch(searchInput.value);
+      });
+    }
   }
 
   function panelIsOpen() {
@@ -520,6 +624,7 @@
     }
   }
 
+  bindStaticControls();
   bindReliableCloseButtons();
   bindOutsideTapBehavior();
   applyMobileLabelMode();

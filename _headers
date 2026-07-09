@@ -1,3 +1,13 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-4kyoC3q0XKyMwNo8vJtVvaEJstLBLd2yU2RV+OqM1wA='; script-src-attr 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
 /sitemap.xml
   Content-Type: application/xml; charset=UTF-8
 

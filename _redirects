@@ -1,4 +1,7 @@
 http://manmatic.institute/* https://www.manmatic.institute/:splat 301!
 http://www.manmatic.institute/* https://www.manmatic.institute/:splat 301!
 https://manmatic.institute/* https://www.manmatic.institute/:splat 301!
+/index.heavy.backup.html /index.html 301!
+/Index-old-color.html /index.html 301!
+/scripts-old-color.js /scripts.js 301!
 /* /index.html 200

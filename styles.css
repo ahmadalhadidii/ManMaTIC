@@ -832,6 +832,31 @@ html,body{height:100dvh;min-height:100dvh}
   }
 }
 
+/* v31 data card shadow cleanup */
+.data-card{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  filter:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.data-card .rail-title,
+.data-card .st-n{
+  text-shadow:none !important;
+}
+.data-card #stats,
+.data-card .st{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  filter:none !important;
+}
+.data-card #stats{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
 /* v16 Process emphasis and ownership line */
 .decision-note{
   margin:2px 4px 8px;
