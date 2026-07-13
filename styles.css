@@ -1352,12 +1352,12 @@ html,body{height:100dvh;min-height:100dvh}
 }
 
 /* Portfolio-field alignment v12 */
-:root{--field-bg:#070707;--field-text:#f2f2f2;--field-muted:#9a9a9a;--field-line:#343434;--field-line-soft:#232323;--font-mono:'IBM Plex Mono',Consolas,monospace;--font-sans:'IBM Plex Sans',Arial,sans-serif;--ease-editorial:cubic-bezier(.22,1,.36,1)}
+:root{--field-bg:#070707;--field-text:#f2f2f2;--field-muted:#9a9a9a;--field-line:#343434;--field-line-soft:#232323;--field-grid-x:8.333vw;--field-grid-y:120px;--font-mono:'IBM Plex Mono',Consolas,monospace;--font-sans:'IBM Plex Sans',Arial,sans-serif;--ease-editorial:cubic-bezier(.22,1,.36,1)}
 html,body{background:var(--field-bg)!important;color:var(--field-text);font-family:var(--font-sans)!important}
 button,input,.brand-mini,.brand-sub,.lg-title,.lg-item,.rail-title,.m-title,.st-l,.fpill,.credit,.p-tag,.p-meta,.p-sec-h,#nm-tag,#nm-meta,.nm-sec-h{font-family:var(--font-mono)!important}
-#bg{background:repeating-linear-gradient(to right,transparent 0,transparent calc(8.333vw - 1px),rgba(238,238,238,.027) 8.333vw),linear-gradient(90deg,transparent 0 37%,rgba(238,238,238,.014) 48%,transparent 61%),repeating-linear-gradient(to bottom,transparent 0,transparent 119px,rgba(238,238,238,.018) 120px),#070707!important;animation:field-drift 34s linear infinite alternate}
+#bg{inset:-18px;background:repeating-linear-gradient(to right,transparent 0 calc(var(--field-grid-x) - 1px),rgba(232,236,240,.015) calc(var(--field-grid-x) - 1px) var(--field-grid-x)),repeating-linear-gradient(to bottom,transparent 0 calc(var(--field-grid-y) - 1px),rgba(232,236,240,.011) calc(var(--field-grid-y) - 1px) var(--field-grid-y)),radial-gradient(ellipse 54% 47% at 48% 51%,rgba(203,211,218,.052) 0%,rgba(150,160,170,.018) 48%,transparent 74%),radial-gradient(ellipse 35% 48% at 3% 86%,rgba(224,229,233,.025),transparent 70%),radial-gradient(ellipse 30% 42% at 97% 10%,rgba(180,190,199,.022),transparent 72%),linear-gradient(128deg,#050505 0%,#090a0b 47%,#070809 68%,#030303 100%)!important;animation:field-drift 34s ease-in-out infinite alternate;will-change:transform}
 @keyframes field-drift{from{transform:translate3d(0,-8px,0)}to{transform:translate3d(0,8px,0)}}
-.noise{opacity:.14!important;mix-blend-mode:screen!important;background-image:radial-gradient(circle at 30% 35%,rgba(232,232,232,.18) 0 .45px,transparent .7px),repeating-linear-gradient(to bottom,transparent 0 3px,rgba(232,232,232,.03) 4px)!important;background-size:5px 5px,100% 4px!important}.scan{opacity:.018!important}
+.noise{opacity:.05!important;mix-blend-mode:soft-light!important;background-image:radial-gradient(circle,rgba(242,232,201,.24) 0 .45px,transparent .7px)!important;background-size:6px 6px!important}.scan{opacity:.009!important}
 
 #hdr{padding:10px 28px 9px!important;border-bottom:1px solid rgba(216,92,39,.16);background:linear-gradient(90deg,rgba(7,7,7,.88) 0%,rgba(18,12,9,.68) 42%,rgba(7,7,7,.18) 72%,transparent 100%)!important;backdrop-filter:blur(4px)}
 #hdr-left{width:min(980px,calc(100vw - 545px));max-width:min(980px,calc(100vw - 545px))}
@@ -1457,6 +1457,9 @@ body.portfolio-intro #hdr,body.portfolio-intro #project-strip,body.portfolio-int
 @media (max-width:900px){.credit{right:10px!important;bottom:8px!important}.author-mark{font-size:7.5px;padding:4px 6px}.field-credit{display:none}}
 @media (max-width:900px){.project-details summary{font-size:7.5px}.project-brief-popover{width:calc(100vw - 20px);max-height:180px;font-size:10px}}
 @media (max-width:900px){#project-strip{left:10px!important;padding-left:0!important}#project-strip #legend{left:10px!important;padding-left:0!important}}
+
+/* Monochrome spatial field: adds depth without competing with the orange interface accents. */
+@media (max-width:900px){:root{--field-grid-x:20vw;--field-grid-y:96px}#bg{inset:-12px}.noise{opacity:.035!important}}
 
 /* Structural header alignment v15: project info and key follow the header flow. */
 #project-strip{position:static!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;width:max-content!important;max-width:100%!important;margin:10px 0 0!important;padding:0!important;border:0!important;overflow:visible!important}
