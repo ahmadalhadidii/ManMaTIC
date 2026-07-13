@@ -1466,3 +1466,16 @@ body.portfolio-intro #hdr,body.portfolio-intro #project-strip,body.portfolio-int
 #project-strip #legend{position:static!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;width:max-content!important;max-width:100%!important;margin:10px 0 0!important;padding:7px 0 0!important;border:0!important;border-top:1px solid rgba(216,92,39,.24)!important;transform:none!important;overflow:visible!important}
 @media (max-width:900px){#project-strip{margin-top:8px!important}#project-strip #legend{margin-top:8px!important;max-width:calc(100vw - 20px)!important;overflow-x:auto!important;scrollbar-width:none!important}#project-strip #legend::-webkit-scrollbar{display:none}}
 
+/* Loader proportion and opening-banner identity v16. */
+.l-preview{grid-column:1/7;width:min(100%,620px);justify-self:start}
+.l-preview-image{width:100%;aspect-ratio:4/3}
+.l-preview-image img{object-position:center;transform-origin:center}
+.l-preview figcaption{justify-content:flex-start}
+.l-identity{display:flex;align-items:center;gap:12px}
+.l-mark{width:42px;height:42px;flex:0 0 42px;object-fit:cover;clip-path:inset(3.5% round 11%);mix-blend-mode:screen}
+.l-identity .l-brand{margin-bottom:6px}
+.l-identity .l-kicker{color:#d85c27;letter-spacing:.13em}
+@media (max-width:760px){.l-mark{width:34px;height:34px;flex-basis:34px}.l-identity{gap:9px}}
+@media (max-width:760px){.l-preview{display:block;width:calc(100vw - 32px);max-width:56dvh;height:auto;margin-inline:auto}.l-preview-image{height:auto;max-height:none!important;aspect-ratio:4/3!important}}
+@media (max-height:560px) and (orientation:landscape){.l-field{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:center}.l-preview{grid-column:1/7;width:min(54vw,58.66vh);margin-inline:0}.l-preview-image{max-height:none!important;aspect-ratio:4/3!important}.l-counter{grid-column:8/13}}
+
