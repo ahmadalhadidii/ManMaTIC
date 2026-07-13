@@ -3,6 +3,64 @@
     return;
   }
 
+  const PORTFOLIO_PROJECT_URL = "https://www.ahmadalhadidii.manmatic.institute/project.html?project=project-01";
+
+  if (typeof radius === "function") {
+    const originalNodeRadius = radius;
+    const emphasizedNodeRadius = function (node) {
+      const baseRadius = originalNodeRadius(node);
+      return node && node.id === "core" ? baseRadius * 1.16 : baseRadius;
+    };
+    try {
+      radius = emphasizedNodeRadius;
+    } catch (err) {
+      // Keep the original canvas radius if the global binding is read-only.
+    }
+    window.radius = emphasizedNodeRadius;
+  }
+
+  (function improveGraphTypography() {
+    const graphCanvas = document.getElementById("canvas");
+    const graphContext = graphCanvas ? graphCanvas.getContext("2d") : null;
+    if (!graphContext || graphContext.__manmaticReadableType) {
+      return;
+    }
+    graphContext.__manmaticReadableType = true;
+
+    const nativeMeasureText = graphContext.measureText.bind(graphContext);
+    const nativeFillText = graphContext.fillText.bind(graphContext);
+    const readableFont = function (font) {
+      const match = String(font || "").match(/^([0-9.]+)px\s+Roboto Mono/i);
+      if (!match) {
+        return null;
+      }
+      const currentSize = Number(match[1]);
+      const readableSize = Math.max(currentSize + 0.65, currentSize * 1.1);
+      return readableSize.toFixed(2) + "px IBM Plex Mono, Consolas, monospace";
+    };
+
+    graphContext.measureText = function (text) {
+      const previousFont = this.font;
+      const adjustedFont = readableFont(previousFont);
+      if (adjustedFont) this.font = adjustedFont;
+      const metrics = nativeMeasureText(text);
+      if (adjustedFont) this.font = previousFont;
+      return metrics;
+    };
+
+    graphContext.fillText = function (text, x, y, maxWidth) {
+      const previousFont = this.font;
+      const adjustedFont = readableFont(previousFont);
+      if (adjustedFont) this.font = adjustedFont;
+      if (typeof maxWidth === "number") {
+        nativeFillText(text, x, y, maxWidth);
+      } else {
+        nativeFillText(text, x, y);
+      }
+      if (adjustedFont) this.font = previousFont;
+    };
+  })();
+
   const GROUP_TRACE = {
     "PROBLEM": {
       focus: "foundational risk definition",
@@ -265,8 +323,12 @@
     const role = escapeHTML(roleTextUpgraded(node));
     const evidence = escapeHTML(evidenceTextUpgraded(node));
     const value = escapeHTML(Number(node.val || 0).toFixed(1));
+    const projectLink = node.id === "core"
+      ? "<div class=\"p-project-link-wrap\"><a class=\"p-project-link\" href=\"" + PORTFOLIO_PROJECT_URL + "\" target=\"_blank\" rel=\"noopener noreferrer\">OPEN MANMATIC PROJECT <span aria-hidden=\"true\">&#8599;</span></a></div>"
+      : "";
 
-    return "<div class=\"p-sec\"><span class=\"p-sec-h\">Meaning</span><div class=\"p-sec-b\">" + description + "</div></div>" +
+    return projectLink +
+      "<div class=\"p-sec\"><span class=\"p-sec-h\">Meaning</span><div class=\"p-sec-b\">" + description + "</div></div>" +
       "<div class=\"p-sec\"><span class=\"p-sec-h\">Design Impact</span><div class=\"p-sec-b\">" + role + "</div></div>" +
       "<div class=\"p-sec\"><span class=\"p-sec-h\">Evidence Trail</span><div class=\"p-sec-b\">" + evidence + "</div></div>" +
       "<div class=\"p-sec\"><span class=\"p-sec-h\">Project Value</span><div class=\"p-sec-b\">" +
@@ -525,6 +587,217 @@
     return pickNodeAtPoint(point.x, point.y);
   }
 
+  function coreNodeAtPoint(x, y) {
+    const picked = pickNodeAtPoint(x, y);
+    if (picked && picked.id === "core") {
+      return picked;
+    }
+
+    const coreNode = nodes.find(function (node) {
+      return node && node.id === "core";
+    });
+    if (!coreNode || !coreNode.screen) {
+      return null;
+    }
+
+    const compact = window.innerWidth < 900 || window.innerHeight < 660;
+    const labelWidth = compact ? 78 : 96;
+    const labelHeight = compact ? 22 : 28;
+    const left = coreNode.screen.x - 12;
+    const right = coreNode.screen.x + labelWidth;
+    const top = coreNode.screen.y - labelHeight / 2;
+    const bottom = coreNode.screen.y + labelHeight / 2;
+    return x >= left && x <= right && y >= top && y <= bottom ? coreNode : null;
+  }
+
+  function coreNodeFromEvent(e) {
+    const point = pointFromEvent(e);
+    return point ? coreNodeAtPoint(point.x, point.y) : null;
+  }
+
+  function openCorePanel(coreNode) {
+    if (coreNode && typeof window.showPanel === "function") {
+      window.showPanel(coreNode);
+    }
+  }
+
+  function bindCoreProjectLink() {
+    if (document.documentElement.dataset.coreProjectLinkV1 === "1") {
+      return;
+    }
+    document.documentElement.dataset.coreProjectLinkV1 = "1";
+
+    const graphCanvas = document.getElementById("canvas");
+    if (!graphCanvas) {
+      return;
+    }
+
+    let mouseStart = null;
+    let mouseMoved = false;
+    let touchStart = null;
+    let touchMoved = false;
+    let ignoreClickUntil = 0;
+
+    document.addEventListener("mousedown", function (e) {
+      if (e.target !== graphCanvas) {
+        mouseStart = null;
+        return;
+      }
+      mouseStart = { x: e.clientX, y: e.clientY };
+      mouseMoved = false;
+    }, true);
+
+    document.addEventListener("mousemove", function (e) {
+      if (mouseStart && Math.hypot(e.clientX - mouseStart.x, e.clientY - mouseStart.y) > 9) {
+        mouseMoved = true;
+      }
+    }, true);
+
+    document.addEventListener("touchstart", function (e) {
+      if (e.target !== graphCanvas || !e.touches || !e.touches.length) {
+        touchStart = null;
+        return;
+      }
+      const touch = e.touches[0];
+      touchStart = { x: touch.clientX, y: touch.clientY };
+      touchMoved = false;
+    }, true);
+
+    document.addEventListener("touchmove", function (e) {
+      if (!touchStart || !e.touches || !e.touches.length) {
+        return;
+      }
+      const touch = e.touches[0];
+      if (Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y) > 9) {
+        touchMoved = true;
+      }
+    }, true);
+
+    document.addEventListener("touchend", function (e) {
+      if (!touchStart || touchMoved || e.target !== graphCanvas) {
+        touchStart = null;
+        touchMoved = false;
+        return;
+      }
+      const coreNode = coreNodeFromEvent(e);
+      touchStart = null;
+      touchMoved = false;
+      if (!coreNode) {
+        return;
+      }
+      ignoreClickUntil = Date.now() + 700;
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === "function") {
+        e.stopImmediatePropagation();
+      }
+      openCorePanel(coreNode);
+    }, true);
+
+    document.addEventListener("click", function (e) {
+      const suppressSyntheticClick = Date.now() < ignoreClickUntil;
+      const isGraphClick = e.target === graphCanvas;
+      const coreNode = isGraphClick && !mouseMoved ? coreNodeFromEvent(e) : null;
+      mouseStart = null;
+      mouseMoved = false;
+      if (suppressSyntheticClick || !coreNode) {
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === "function") {
+        e.stopImmediatePropagation();
+      }
+      openCorePanel(coreNode);
+    }, true);
+  }
+
+  function bindPortfolioLoader() {
+    const loader = document.getElementById("loading");
+    if (!loader || !loader.classList.contains("portfolio-loader")) {
+      document.body.classList.add("portfolio-ready");
+      return;
+    }
+
+    document.body.classList.add("portfolio-intro");
+    loader.hidden = false;
+    loader.classList.remove("is-complete");
+    loader.style.removeProperty("display");
+    loader.style.removeProperty("opacity");
+
+    const progressPrimary = document.getElementById("loading-progress");
+    const progressSecondary = document.getElementById("loading-progress-secondary");
+    const progressBar = document.getElementById("loading-progress-bar");
+    const state = document.getElementById("loading-state");
+    const frame = document.getElementById("loading-frame");
+    const signal = document.getElementById("loading-signal");
+    const activeBinary = document.getElementById("loading-active-binary");
+    const phase = document.getElementById("loading-phase");
+    const announcement = document.getElementById("loading-announcement");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = reducedMotion ? 320 : 1900;
+    let finished = false;
+    let startedAt = 0;
+
+    const renderProgress = function (ratio) {
+      const value = Math.min(100, Math.round(ratio * 100));
+      const formatted = String(value).padStart(3, "0");
+      const binary = value.toString(2).padStart(8, "0");
+      loader.style.setProperty("--loader-ratio", ratio.toFixed(3));
+      if (progressPrimary) progressPrimary.textContent = formatted;
+      if (progressSecondary) progressSecondary.textContent = formatted;
+      if (progressBar) progressBar.style.transform = "scaleX(" + ratio.toFixed(3) + ")";
+      if (frame) frame.textContent = String(Math.min(6, Math.floor(ratio * 6) + 1)).padStart(2, "0") + " / 06";
+      if (signal) signal.textContent = (ratio * 377).toFixed(3).padStart(7, "0");
+      if (activeBinary) activeBinary.textContent = binary + " / " + binary.split("").reverse().join("");
+
+      if (ratio < 0.24) {
+        if (state) state.textContent = "SYSTEM INITIALIZATION";
+        if (phase) phase.textContent = "ARCHIVE ACCESS";
+      } else if (ratio < 0.54) {
+        if (state) state.textContent = "INPUT TRACE";
+        if (phase) phase.textContent = "FIELD ASSEMBLY";
+      } else if (ratio < 0.82) {
+        if (state) state.textContent = "NETWORK CALIBRATION";
+        if (phase) phase.textContent = "CONNECTION MAPPING";
+      } else {
+        if (state) state.textContent = "FIELD READY";
+        if (phase) phase.textContent = "MANMATIC ONLINE";
+      }
+    };
+
+    const finish = function () {
+      if (finished) return;
+      finished = true;
+      renderProgress(1);
+      loader.classList.add("is-complete");
+      loader.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("portfolio-intro");
+      document.body.classList.add("portfolio-ready");
+      if (announcement) announcement.textContent = "ManMaTIC project field ready.";
+      window.setTimeout(function () {
+        loader.hidden = true;
+        loader.style.setProperty("display", "none", "important");
+      }, reducedMotion ? 180 : 560);
+    };
+
+    const step = function (now) {
+      if (!startedAt) startedAt = now;
+      const linear = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - Math.pow(1 - linear, 1.35);
+      renderProgress(eased);
+      if (linear < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        finish();
+      }
+    };
+
+    renderProgress(0);
+    window.requestAnimationFrame(step);
+    window.setTimeout(finish, 3200);
+  }
+
   function bindOutsideTapBehavior() {
     if (document.documentElement.dataset.outsideTapPatchV3 === "1") {
       return;
@@ -624,8 +897,10 @@
     }
   }
 
+  bindPortfolioLoader();
   bindStaticControls();
   bindReliableCloseButtons();
+  bindCoreProjectLink();
   bindOutsideTapBehavior();
   applyMobileLabelMode();
 
